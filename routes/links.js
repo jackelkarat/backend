@@ -12,7 +12,6 @@ const config = {
   database: process.env.database,
 }
 
-
 const pool = new pg.Pool(config);
 
 router.route('/addURL').post((req, res) => {
@@ -20,26 +19,24 @@ router.route('/addURL').post((req, res) => {
   const url = req.body.url;
   pool.connect(function (err, client, done) {
     if (err) {
-    console.log(err);
-  }
-  if (url && userid) {
-    client.query(`INSERT INTO links(link, userid) VALUES('${req.body.url}','${req.body.userid}')`, function (err, result) {
-       done();
-       
-      if (err) {
-        console.log(err);
-        res.status(400).send(err);
-      }else{
-      res.status(200).send('true');		
-
-      }
+      console.log(err);
+    }
+    if (url && userid) {
+      client.query(`INSERT INTO links(link, userid) VALUES('${req.body.url}','${req.body.userid}')`, function (err, result) {
+        done();
+        if (err) {
+          console.log(err);
+          res.status(400).send(err);
+        } else {
+          res.status(200).send('true');
+        }
+        res.end();
+      })
+    } else {
+      res.status(500).send('Error!');
       res.end();
-    })
-  } else {
-    res.status(500).send('Error!');
-    res.end();
-  }
-})
+    }
+  })
 });
 
 
@@ -47,25 +44,25 @@ router.route('/getlinks').post((req, res) => {
   const userid = req.body.userid;
   pool.connect(function (err, client, done) {
     if (err) {
-    console.log(err);
-  }
-  if (userid) {
-    client.query(`SELECT id,link FROM links WHERE userid = '${req.body.userid}'`, function (err, result) {
-      done();
-       
-      if (err) {
-        console.log(err);
-        res.status(400).send(err);
-      }else{
-      res.status(200).send(result.rows);		
+      console.log(err);
+    }
+    if (userid) {
+      client.query(`SELECT id,link FROM links WHERE userid = '${req.body.userid}'`, function (err, result) {
+        done();
 
-      }
+        if (err) {
+          console.log(err);
+          res.status(400).send(err);
+        } else {
+          res.status(200).send(result.rows);
+
+        }
+        res.end();
+      })
+    } else {
+      res.status(500).send('Error!');
       res.end();
-    })
-  } else {
-    res.status(500).send('Error!');
-    res.end();
-  }
-})
+    }
+  })
 });
 module.exports = router;

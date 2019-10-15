@@ -19,7 +19,6 @@ router.route('/register').post((req, res) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
 
-
   pool.connect(function (err, client, done) {
     if (err) {
       console.log(err);
@@ -41,7 +40,7 @@ router.route('/register').post((req, res) => {
                 res.status(400).send(err);
               } else {
                 res.status(200).send('success');
-          
+
               }
               res.end();
             });
@@ -56,13 +55,6 @@ router.route('/register').post((req, res) => {
       res.end();
     }
   })
-
-
-
-  function register(body) {
-   
-  }
-
 });
 
 
@@ -82,7 +74,6 @@ router.route('/login').post((req, res) => {
           console.log(err);
           res.status(400).send(err);
         }
-        // res.status(200).send(result.rows);
         if (result.rowCount > 0) {
           res.status(200).send(result.rows);
         } else {
@@ -95,6 +86,5 @@ router.route('/login').post((req, res) => {
       res.end();
     }
   })
-
 });
 module.exports = router;
